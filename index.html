@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers' Day 2026 - Dr. S. Radhakrishnan</title>
+    <link rel="stylesheet" href="css/universe.css">
+    <!-- Three.js and GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <!-- Tribute Sequence Layer -->
+    <div id="tribute-layer">
+        <div class="diya-container" id="diya">
+            <div class="diya-base"></div>
+            <div class="diya-flame" id="diyaFlame"></div>
+        </div>
+        
+        <div class="tribute-portrait" id="tributePortrait">
+            <img src="assets/images/radhakrishnan.jpg" alt="Dr. S. Radhakrishnan" onerror="this.src='https://via.placeholder.com/150/030308/38bdf8?text=Dr.+S.+R.'">
+            <svg class="garland-svg" id="garland" viewBox="0 0 280 320" xmlns="http://www.w3.org/2000/svg">
+                <path id="gpath" d="M 20,20 Q 140,380 260,20" fill="none" />
+                <text font-size="36">
+                    <textPath href="#gpath" startOffset="50%" text-anchor="middle">
+                        🌼🏵️🌺🌼🏵️🌺🏵️🌼🌺🏵️🌼
+                    </textPath>
+                </text>
+            </svg>
+        </div>
+
+        <div class="tribute-text" id="tributeText">
+            Respectful Tribute to Dr. Sarvepalli Radhakrishnan
+        </div>
+    </div>
+
+    <!-- Main Content Layer -->
+    <div id="ui-layer">
+        <div class="content-box" id="mainContent">
+            <div class="portrait-container">
+                <img src="assets/images/radhakrishnan.jpg" alt="Dr. S. Radhakrishnan" onerror="this.src='https://via.placeholder.com/150/030308/38bdf8?text=Dr.+S.+R.'">
+            </div>
+            <h1>Dr. Sarvepalli Radhakrishnan</h1>
+            <p>You taught us that true knowledge is found not just in scattered observations, but in understanding the deeper patterns that shape our world. Your vision remains the guiding mean in our evolving distribution of thought, helping us draw meaningful conclusions from the variance of life.</p>
+            <button class="action-button" id="continueBtn">Continue the Journey</button>
+        </div>
+    </div>
+
+    <script src="js/CosmicEngine.js"></script>
+    <script>
+        const engine = new CosmicEngine('canvas-container');
+        
+        window.addEventListener('load', () => {
+            const diya = document.getElementById('diya');
+            const flame = document.getElementById('diyaFlame');
+            const portrait = document.getElementById('tributePortrait');
+            const garland = document.getElementById('garland');
+            const text = document.getElementById('tributeText');
+            const tributeLayer = document.getElementById('tribute-layer');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Sequence:
+            // 1. Show Diya base
+            setTimeout(() => { diya.style.opacity = 1; }, 1000);
+            
+            // 2. Ignite Flame
+            setTimeout(() => { flame.style.opacity = 1; }, 2500);
+            
+            // 3. Reveal Portrait
+            setTimeout(() => { portrait.style.opacity = 1; }, 4000);
+            
+            // 4. Garland drops
+            setTimeout(() => { garland.style.transform = 'translateY(0)'; garland.style.opacity = 1; }, 5500);
+            
+            // 5. Text appears
+            setTimeout(() => { text.style.opacity = 1; }, 7000);
+            
+            // 6. Fade out tribute, fade in greeting
+            setTimeout(() => {
+                tributeLayer.style.opacity = 0;
+                setTimeout(() => {
+                    tributeLayer.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }, 2000);
+            }, 10000);
+        });
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.remove('visible');
+            engine.triggerBlackHole(() => {
+                window.location.href = 'page2.html';
+            });
+        });
+    </script>
+</body>
+</html>

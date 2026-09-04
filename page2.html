@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers' Day 2026 - HOD Mrs. Aparna Chowdhury</title>
+    <link rel="stylesheet" href="css/universe.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <!-- White flash overlay from previous magnetar explosion -->
+    <div id="entry-flash" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20; pointer-events: none;"></div>
+
+    <div id="ui-layer">
+        <div class="content-box" id="mainContent">
+            <div class="portrait-container">
+                <img src="assets/images/aparna.jpg" alt="Mrs. Aparna Chowdhury" onerror="this.src='https://via.placeholder.com/150/030308/38bdf8?text=A.C.'">
+            </div>
+            <h1>Mrs. Aparna Choudhury</h1>
+            <h2>HOD, Department of Statistics</h2>
+            <p>You teach us to look beyond mere data points and discover the hidden relationships that shape our world. Through your guidance, we learn to minimize our residuals of doubt, build confidence in our estimators, and draw profound inferences from a sample of life's experiences.</p>
+            <button class="action-button" id="continueBtn">Proceed</button>
+        </div>
+    </div>
+
+    <script src="js/CosmicEngine.js"></script>
+    <script>
+        const engine = new CosmicEngine('canvas-container');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const flash = document.getElementById('entry-flash');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Fade from white
+            gsap.to(flash, {
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out",
+                onComplete: () => {
+                    flash.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }
+            });
+        });
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.remove('visible');
+            
+            engine.triggerPulsar(() => {
+                window.location.href = 'page4.html';
+            });
+        });
+    </script>
+</body>
+</html>

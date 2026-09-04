@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers' Day 2026 - Miss Payel Debnath</title>
+    <link rel="stylesheet" href="css/universe.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <!-- Gold flash overlay from kilonova -->
+    <div id="entry-flash" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ffd700; z-index: 20; pointer-events: none;"></div>
+
+    <div id="ui-layer">
+        <div class="content-box" id="mainContent">
+            <div class="portrait-container">
+                <img src="assets/images/payel.jpg" alt="Miss Payel Debnath" onerror="this.src='https://via.placeholder.com/150/030308/38bdf8?text=P.D.'">
+            </div>
+            <h1>Miss Payel Debnath</h1>
+            <h2>Assistant Professor, Department of Statistics</h2>
+            <p>Among a space of infinite feasible paths and challenging constraints, you teach us the art of optimization. Thank you for guiding us to evaluate possible outcomes, maximize our objective functions, and ultimately discover the most optimal solutions in both mathematics and life.</p>
+            <button class="action-button" id="continueBtn">Complete the Journey</button>
+        </div>
+    </div>
+
+    <script src="js/CosmicEngine.js"></script>
+    <script>
+        const engine = new CosmicEngine('canvas-container');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const flash = document.getElementById('entry-flash');
+            const mainContent = document.getElementById('mainContent');
+            
+            gsap.to(flash, {
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out",
+                onComplete: () => {
+                    flash.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('continueBtn').addEventListener('click', () => {
+                const mainContent = document.getElementById('mainContent');
+                mainContent.classList.remove('visible');
+                
+                engine.triggerWormhole(() => {
+                    window.location.href = 'final.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

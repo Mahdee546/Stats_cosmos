@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers' Day 2026 - Mr. Priom Seal</title>
+    <link rel="stylesheet" href="css/universe.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div id="entry-flash" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 20; pointer-events: none;"></div>
+
+    <div id="ui-layer">
+        <div class="content-box" id="mainContent">
+            <div class="portrait-container">
+                <img src="assets/images/priom.jpg" alt="Mr. Priom Seal" onerror="this.src='https://via.placeholder.com/150/030308/38bdf8?text=P.S.'">
+            </div>
+            <h1>Mr. Priom Seal</h1>
+            <h2>Assistant Professor, Department of Statistics</h2>
+            <p>Learning is an evolving process, and you show us how to navigate the stochastic trajectories of our academic journey. Thank you for providing the mathematical functions that transform our random variables of thought into clear, meaningful paths through uncertainty.</p>
+            <button class="action-button" id="continueBtn">Advance</button>
+        </div>
+    </div>
+
+    <script src="js/CosmicEngine.js"></script>
+    <script>
+        const engine = new CosmicEngine('canvas-container');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const flash = document.getElementById('entry-flash');
+            const mainContent = document.getElementById('mainContent');
+            
+            gsap.to(flash, {
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out",
+                onComplete: () => {
+                    flash.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }
+            });
+        });
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.remove('visible');
+            
+            engine.triggerGRB(() => {
+                window.location.href = 'page_shainee.html';
+            });
+        });
+    </script>
+</body>
+</html>
