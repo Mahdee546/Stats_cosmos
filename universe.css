@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+  --bg-color: #030308;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  /* Prevent scrolling, 3D scene handles the view */
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 3D Canvas Container */
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Base layer */
+}
+
+/* UI Overlay Layer */
+#ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  /* Let clicks pass through to 3D scene where needed */
+}
+
+.content-box {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  pointer-events: auto;
+  /* Enable clicks on the content box */
+  opacity: 0;
+  /* Starts hidden, animated in by JS */
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.content-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.subjects {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.subject-tag {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+/* Touch-friendly Buttons */
+.action-button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: all 0.5s ease;
+}
+
+.action-button:hover,
+.action-button:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+  outline: none;
+}
+
+.action-button:hover::before {
+  left: 100%;
+}
+
+/* Portrait container inside the 3D scene will handle actual portraits,
+   but if we fallback to 2D for some reason: */
+.portrait-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem auto;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.portrait-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tribute specific - Traditional Diya & Garland */
+#tribute-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.9);
+  transition: opacity 2s ease;
+}
+
+.diya-container {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.diya-base {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 30px;
+  background: linear-gradient(to bottom, #d2691e, #8b4513);
+  border-radius: 10px 10px 40px 40px;
+  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.diya-flame {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 40px;
+  background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffff00 20%, #ff8c00 60%, transparent 100%);
+  border-radius: 50% 50% 20% 20%;
+  box-shadow: 0 0 40px 10px #ff9800, 0 0 80px 20px #ffeb3b;
+  opacity: 0;
+  transition: opacity 1s ease;
+  animation: flicker 0.1s infinite alternate;
+}
+
+.tribute-portrait {
+  position: relative;
+  width: 200px;
+  height: 250px;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transition: opacity 2s ease;
+  border: 4px solid #d4af37;
+  /* Gold border */
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.tribute-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.garland-svg {
+  position: absolute;
+  top: -20px;
+  left: -40px;
+  width: 280px;
+  height: 320px;
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: opacity 1s ease, transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+  filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.8));
+  z-index: 5;
+  pointer-events: none;
+}
+
+.tribute-text {
+  font-family: 'Cinzel', serif;
+  color: #fff;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  opacity: 0;
+  transition: opacity 1s ease;
+  text-align: center;
+  max-width: 80%;
+  text-shadow: 0 0 10px #ff9800;
+}
+
+@keyframes flicker {
+  0% {
+    transform: translateX(-50%) scale(1) rotate(-1deg);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1.05) rotate(1deg);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .content-box {
+    padding: 2rem;
+  }
+
+  .action-button {
+    width: 100%;
+    padding: 1.2rem;
+  }
+}
